@@ -71,10 +71,8 @@ const choices = document.querySelectorAll(".game-image");
 choices.forEach((choice) => {
     choice.addEventListener("click", () => {
         userChoice = choice.getAttribute("id");
-        console.log("User's choice:", userChoice);
 
         const computerChoice = getRandomChoice();
-        console.log("Computer's choice:", computerChoice);
 
         let result = document.getElementById("msg");
 
