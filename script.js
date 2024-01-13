@@ -1,4 +1,10 @@
-function addImage(src, alt, attributes = {}, width, height) {
+let compScore = 0;
+let userScore = 0;
+
+function addImage(src, alt, width, height, attributes = {}, labelFontSize = "30px") {
+  const container = document.createElement("div");
+
+  // Create an image element
   const img = document.createElement("img");
   img.src = src;
   img.alt = alt;
@@ -27,7 +33,16 @@ function addImage(src, alt, attributes = {}, width, height) {
     img.style.transform = "scale(1)";
   });
 
-  return img;
+  // Create a label for the image
+  const label = document.createElement("p");
+  label.innerText = alt;
+  label.style.fontSize = labelFontSize;
+
+  // Append image and label to the container
+  container.appendChild(img);
+  container.appendChild(label);
+
+  return container;
 }
 
 // Create a container div
@@ -37,26 +52,16 @@ imageContainer.id = "image-container";
 // Append the container to the body
 document.body.appendChild(imageContainer);
 
-// Add Stone, Paper, and Scissor images with attributes and size to the container
+// Add Stone, Paper, and Scissor images with labels, attributes, and size to the container
 imageContainer.appendChild(
-  addImage("stone.png", "Stone", { class: "game-image", id: "Stone" }, 200, 200)
+  addImage("stone.png", "Stone", 200, 200, { class: "game-image", id: "Stone" })
 );
 imageContainer.appendChild(
-  addImage("paper.png", "Paper", { class: "game-image", id: "Paper" }, 200, 200)
+  addImage("paper.png", "Paper", 200, 200, { class: "game-image", id: "Paper" })
 );
 imageContainer.appendChild(
-  addImage(
-    "scissors.png",
-    "Scissor",
-    { class: "game-image", id: "Scissors" },
-    200,
-    200
-  )
+  addImage("scissors.png", "Scissor", 200, 200, { class: "game-image", id: "Scissors" })
 );
-
-let compScore = 0;
-let userScore = 0;
-
 
 function getRandomChoice() {
   const choices = ["Stone", "Paper", "Scissors"];
@@ -64,59 +69,64 @@ function getRandomChoice() {
   return choices[compChoice];
 }
 
-let userChoice; // Declare userChoice outside the event listener
+function displayResult(message, backgroundColor) {
+  const result = document.getElementById("msg");
+  result.innerText = message;
+  result.style.backgroundColor = backgroundColor;
+}
 
 const choices = document.querySelectorAll(".game-image");
 
 choices.forEach((choice) => {
-    choice.addEventListener("click", () => {
-        userChoice = choice.getAttribute("id");
+  choice.addEventListener("click", () => {
+    const userChoice = choice.getAttribute("id");
+    const computerChoice = getRandomChoice();
 
-        const computerChoice = getRandomChoice();
+    let result = document.getElementById("msg");
 
-        let result = document.getElementById("msg");
+    if (userChoice === computerChoice) {
+      displayResult("Oops..!! Match draw, try again", "White");
+      document.getElementById("msg").style.color ="black";
 
-        if (userChoice === computerChoice) {
-            result.innerText = "Oops..!!  Match draw , try again";
-            result.style.backgroundColor = "White";
-            result.style.color = "Black";
+    } else if (
+      (userChoice === "Stone" && computerChoice === "Paper") ||
+      (userChoice === "Paper" && computerChoice === "Scissors") ||
+      (userChoice === "Scissors" && computerChoice === "Stone")
+    ) {
+      displayResult("You lose! Computer wins, try again", "Red");
+      compScore++;
+    } else {
+      displayResult("You win! Computer loses, Great play again", "Green");
+      userScore++;
+    }
 
-        } else if (userChoice === 'Stone') {
-            if (computerChoice === 'Paper') {
-                result.innerHTML = "You lose! Computer wins , try again";
-                result.style.backgroundColor = "Red";
-                compScore++;
-            } else {
-                result.innerHTML = "You win! Computer loses , Great play again";
-                result.style.backgroundColor = "Green";
-                userScore++;
-            }
-        } else if (userChoice === 'Paper') {
-            if (computerChoice === 'Scissors') {
-                result.innerHTML = "You lose! Computer wins , try again";
-                result.style.backgroundColor = "Red";
-                compScore++;
-            } else {
-                result.innerHTML = "You win! Computer loses , Great play again";
-                result.style.backgroundColor = "Green";
-                userScore++;
-            }
-        } else if (userChoice === 'Scissors') {
-            if (computerChoice === 'Stone') {
-                result.innerHTML = "You lose! Computer wins , try again";
-                result.style.backgroundColor = "Red";
-                compScore++;
-            } else {
-                result.innerHTML = "You win! Computer loses , Great play again";
-                result.style.backgroundColor = "Green";
-                userScore++;
-            }
-        }
-        document.getElementById("user-choice").innerText = "Your Choice: " + userChoice;
-        document.getElementById("comp-choice").innerText = "Computer's Choice: " + computerChoice;
+    document.getElementById("user-choice").innerText = "Your Choice: " + userChoice;
+    document.getElementById("comp-choice").innerText = "Computer's Choice: " + computerChoice;
 
-        // Update the scores on the page
-        document.getElementById("user-score").innerText = userScore;
-        document.getElementById("comp-score").innerText = compScore;
-    });
+    // Update the scores on the page
+    document.getElementById("user-score").innerText = userScore;
+    document.getElementById("comp-score").innerText = compScore;
+
+    // Check if either the user or the computer has reached 10 points
+    if (userScore === 10 || compScore === 10) {
+      let winnerMessage;
+
+      if (userScore === 10) {
+        winnerMessage = "Congratulations! You won the match!";
+      } else {
+        winnerMessage = "Oops! Computer won the match. Better luck next time! , play again";
+      }
+
+      // Display the winner message
+      displayResult(winnerMessage, "blue");
+
+      // Reset the game
+      userScore = 0;
+      compScore = 0;
+
+      // Update the scores on the page after resetting
+      document.getElementById("user-score").innerText = userScore;
+      document.getElementById("comp-score").innerText = compScore;
+    }
+  });
 });
