@@ -77,37 +77,37 @@ choices.forEach((choice) => {
         let result = document.getElementById("msg");
 
         if (userChoice === computerChoice) {
-            result.innerText = "Oops..!!  Match draw";
+            result.innerText = "Oops..!!  Match draw , try again";
             result.style.backgroundColor = "White";
             result.style.color = "Black";
 
         } else if (userChoice === 'Stone') {
             if (computerChoice === 'Paper') {
-                result.innerHTML = "You lose! Computer wins";
+                result.innerHTML = "You lose! Computer wins , try again";
                 result.style.backgroundColor = "Red";
                 compScore++;
             } else {
-                result.innerHTML = "You win! Computer loses";
+                result.innerHTML = "You win! Computer loses , Great play again";
                 result.style.backgroundColor = "Green";
                 userScore++;
             }
         } else if (userChoice === 'Paper') {
             if (computerChoice === 'Scissors') {
-                result.innerHTML = "You lose! Computer wins";
+                result.innerHTML = "You lose! Computer wins , try again";
                 result.style.backgroundColor = "Red";
                 compScore++;
             } else {
-                result.innerHTML = "You win! Computer loses";
+                result.innerHTML = "You win! Computer loses , Great play again";
                 result.style.backgroundColor = "Green";
                 userScore++;
             }
         } else if (userChoice === 'Scissors') {
             if (computerChoice === 'Stone') {
-                result.innerHTML = "You lose! Computer wins";
+                result.innerHTML = "You lose! Computer wins , try again";
                 result.style.backgroundColor = "Red";
                 compScore++;
             } else {
-                result.innerHTML = "You win! Computer loses";
+                result.innerHTML = "You win! Computer loses , Great play again";
                 result.style.backgroundColor = "Green";
                 userScore++;
             }
